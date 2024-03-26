@@ -1,0 +1,52 @@
+
+
+
+          <header class="p-3 mb-3">
+            <div class="container">
+              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                  <img src="../../../assets/img/logo.png" alt="logo" style="max-width: 80px; max-height: 80px;">
+                </a>
+        
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 nav-masthead" style="margin-left: 5px;">
+
+                  <li class="nav-item" routerLinkActive="active">
+                    <a class="nav-link" routerLinkActive="active" aria-current="page" [routerLink]="['home']">Home</a>
+                  </li>
+              
+                  <li class="nav-item" routerLinkActive="active">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['equipo']">Plantilla</a>
+                  </li>
+              
+                  <li class="nav-item" routerLinkActive="active">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['about']">About us</a>
+                  </li>
+                </ul>
+        
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" (keyup)="buscar(termino.value)" #termino>
+                </form>
+
+                <button class="btn btn-outline-success" type="button" *ngIf="!isLoggedIn()" (click)="login()" >Sign in</button>
+                <button class="btn btn-outline-success" type="button" *ngIf="!isLoggedIn()" [routerLink]="['resgisterProfes']" style="margin-left: 20px;">Sign in like Teacher</button>
+        
+                <div class="dropdown text-end" *ngIf="isLoggedIn()">
+                  <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" (click)="sesion()">
+                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                  </a>
+                  <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" *ngIf="(isLoggedIn())" [routerLink]="['peticiones']" >Peticiones</a></li>
+                    <li><a class="dropdown-item" *ngIf="(isLoggedIn()) && profe" [routerLink]="['conversaciones']" >Citas</a></li> <!-- COMO HACER PARA QUE SOLO LE SALGAN A LOS PROFES -->
+                    <li><a class="dropdown-item" *ngIf="isLoggedIn()" [routerLink]="['conversaciones']" >Chats</a></li>
+                    <li><a class="dropdown-item" *ngIf="isLoggedIn()" [routerLink]="['perfil']" >Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" *ngIf="isLoggedIn()" (click)="logout()" [style.cursor]="'pointer'">Sign out</a></li>
+                    <!-- <li><a class="dropdown-item" *ngIf="isLoggedIn()" (click)="createUser()" [style.cursor]="'pointer'">PROBAR</a></li> -->
+                  </ul>
+                </div>
+                
+              </div>
+            </div>
+          </header>
+        
+

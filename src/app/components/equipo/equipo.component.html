@@ -1,0 +1,22 @@
+
+
+<app-loading *ngIf="loading"></app-loading>
+
+  <div class="container mt-3">
+        
+    <div class="row row-cols-1 row-cols-md-3 g-4 ">
+
+        <div class="col" *ngFor="let profesor of profesores" (click)="PerfilProfesor(profesor.user_id)" style="cursor: pointer;" >
+          <div class="card bg-secondary">
+            <img src="https://b2472105.smushcdn.com/2472105/wp-content/uploads/2023/01/Fotografo-Monterrey-_49-1-819x1024.jpg?lossy=1&strip=1&webp=1" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{profesor.name}}</h5>
+              <p class="card-text">{{profesor.user_metadata.descripcion}}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+</div>
+
+

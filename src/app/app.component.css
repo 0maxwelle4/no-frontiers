@@ -1,0 +1,11 @@
+.app_component{
+
+    flex-direction: column;
+
+}
+
+main{
+
+    min-height: 100vh;
+
+}

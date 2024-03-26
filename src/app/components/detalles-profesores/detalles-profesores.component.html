@@ -1,0 +1,32 @@
+
+
+<main class="px-3">
+
+    <button class="btn btn-outline-danger mt-3 ms-3 " style="width: 120px;" (click)="regresar()" >
+        <== Back
+    </button>
+
+    <button class="btn btn-outline-primary mt-3 ms-3 " style="width: 120px;" (click)="chat()" >
+      Charlar
+  </button>
+
+    <div class="card mb-3 container mt-3 bg-secondary"  *ngFor="let profesorDetalles of profesorDetalles" >
+        <div class="row g-0 ">
+          <div class="col-md-4 ">
+            <img src="https://b2472105.smushcdn.com/2472105/wp-content/uploads/2023/01/Fotografo-Monterrey-_49-1-819x1024.jpg?lossy=1&strip=1&webp=1" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{profesorDetalles.name}}</h5>
+              <p class="card-text">{{profesorDetalles.user_metadata.descripcion}}</p>
+              <p class="card-text"><small class="text-white">Last updated 3 mins ago</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+</main>
+
+
