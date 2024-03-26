@@ -15,7 +15,8 @@ export class AuthService {
     clientID: 'cSab7XYHx9yKcfOqYU9LJpUOFE9AA77b',
     domain: 'dev-u5hvg8wb8m85i4jl.eu.auth0.com',
     responseType: 'token id_token',
-    redirectUri: 'http://localhost:4200',
+    redirectUri: 'https://0maxwelle4.github.io/no-frontiers/home',
+    /* redirectUri: 'http://localhost:4200', */
     audience: 'https://dev-u5hvg8wb8m85i4jl.eu.auth0.com/api/v2/',
     scope: 'openid profile email read:current_user user_metadata create:users'
   });
