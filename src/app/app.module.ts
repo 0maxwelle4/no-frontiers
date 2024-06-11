@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
+import {FormsModule} from '@angular/forms';
 
 //SERVICIOS
 import { ProfesoresService } from "./services/profesores.service";
@@ -34,6 +36,9 @@ import { ListaChatComponent } from './components/lista-chat/lista-chat.component
 import { RegisterProfesComponent } from './components/register-profes/register-profes.component';
 import { PeticionesComponent } from './components/peticiones/peticiones.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { NoimagePipe } from './Pipes/noimage.pipe';
+import { ConvertBase64Pipe } from './Pipes/convert-base64.pipe';
+import { ManageComponent } from './components/manage/manage.component';
 
 
 
@@ -52,7 +57,10 @@ import { LoadingComponent } from './shared/loading/loading.component';
     ListaChatComponent,
     RegisterProfesComponent,
     PeticionesComponent,
-    LoadingComponent
+    LoadingComponent,
+    NoimagePipe,
+    ConvertBase64Pipe,
+    ManageComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +68,8 @@ import { LoadingComponent } from './shared/loading/loading.component';
     FeatureRoutingModule,
     HttpClientModule,
     AngularFirestoreModule,
+    CommonModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [

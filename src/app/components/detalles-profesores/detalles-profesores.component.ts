@@ -19,10 +19,10 @@ export class DetallesProfesoresComponent {
   constructor( private _activatedRoute: ActivatedRoute, private _profesoresService: ProfesoresService, private router:Router, private location: Location ){
 
     this._activatedRoute.params.subscribe( (data:any) => {
-      
-      this.id = data.id; 
+
+      this.id = data.id;
       this.getProfesFromService();
-    
+
     });
 
   }
@@ -38,9 +38,10 @@ export class DetallesProfesoresComponent {
     });
 
   }
-  
+
 
   regresar(){
+    localStorage.setItem('isRefreshed', 'false');
     this.location.back();
     /* this.router.navigate(['equipo']); */
 

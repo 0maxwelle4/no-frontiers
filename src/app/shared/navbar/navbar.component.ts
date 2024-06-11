@@ -8,24 +8,33 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit{
+export class NavbarComponent implements OnInit {
 
   role:string ="";
   profe:boolean = false;
+  gerente:boolean = false;
+  avatarImg: any = "";
 
   constructor(
     private router: Router,
     private authService : AuthService
-  ) {
-    this.sesion();
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.sesion();
+
+    setTimeout( () => {
+      this.avatarImg = localStorage.getItem('picture') || 'https://github.com/mdo.png';
+      this.sesion();
+    },900);
+  }
+
+  goToEquipo() {
+    localStorage.setItem('isRefreshed', 'false');
+    //this.router.navigate(['equipo']);
   }
 
   buscar(termino: any): void {
-    this.router.navigate(['/buscar', termino]);  
+    this.router.navigate(['/buscar', termino]);
   }
 
   login(){
@@ -44,15 +53,23 @@ export class NavbarComponent implements OnInit{
 
   }
 
-  sesion(){    
+  sesion(){
     this.authService.getUserProfile().subscribe( user => {
+      this.avatarImg = user.picture;
+      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',user);
+
       this.authService.metaData(user.sub).subscribe( data => {
-        if(data.app_metadata.role){
-          this.profe = true;     
+
+        if(data.app_metadata?.role == 'profesor'){
+          this.profe = true;
+        }
+
+        if (data.app_metadata?.role == 'gerente') {
+          this.gerente = true;
         }
       })
+
     })
   }
-  
-}  
- 
+
+}

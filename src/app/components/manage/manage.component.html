@@ -1,0 +1,29 @@
+<div class="row g-0 d-flex justify-content-center">
+
+  <div class="col-12 col-lg-5 col-xl-3 px-4">
+    <div class="d-flex align-items-center">
+      <div class="flex-grow-1">
+        <input type="text" class="form-control my-3" placeholder="Search..." #termino (keyup)="filter(termino.value)">
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-3">
+    <div class="row row-cols-2 row-cols-md-5 g-4" id="masonry-grid">
+      <div class="card-columns" *ngFor="let user of displayedUsers">
+        <div class="card bg-secondary pointer">
+          <img [src]="user.picture" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{user.name}}</h5>
+            <p class="card-text">{{user.email}}</p>
+            <a (click)="deleteUser(user.user_id)" class="btn btn-outline-danger">Bannear</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger container mt-5" role="alert"  *ngIf="displayedUsers.length == 0">
+    No encontramos al usuario que busca !!!!!
+  </div>
+</div>

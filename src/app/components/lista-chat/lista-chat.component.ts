@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { ChatService } from '../../services/chat.service';
-import { ProfesoresService } from '../../services/profesores.service';
-import { Router } from '@angular/router';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {ChatService} from '../../services/chat.service';
+import {ProfesoresService} from '../../services/profesores.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-lista-chat',
@@ -12,15 +12,15 @@ import { Router } from '@angular/router';
 export class ListaChatComponent implements OnInit, AfterViewInit {
 
   path: string = 'conversations';
-  user:any = [];
-  convsList:any = [];
+  user: any = [];
+  convsList: any = [];
   profesores: any = [];
-  nombreProfesor:any[] = [];
+  nombreProfesor: any[] = [];
+  displayedProfesor: any[] = [];
 
-  loading:boolean = true;
+  loading: boolean = true;
 
   ngAfterViewInit(): void {
-    setTimeout(()=>{this.loading=false},1000);
   }
 
   constructor(
@@ -28,97 +28,104 @@ export class ListaChatComponent implements OnInit, AfterViewInit {
     private chatService: ChatService,
     private profesoresSerice: ProfesoresService,
     private router: Router
-    ) { }
+  ) {
+  }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
 
-       this.authService.getUserProfile().subscribe( data => {
-        console.log(data);
-        this.user = data;
-        this.profesoresSerice.usersAuth0().subscribe( params => {
-          this.profesores = params;
-          console.log(this.profesores);
-          this.buscar();
-        });
-      } );
+    this.authService.getUserProfile().subscribe(data => {
+      console.log(data);
+      this.user = data;
+      this.profesoresSerice.usersAuth0().subscribe(params => {
+        this.profesores = params;
+        console.log(this.profesores);
+        this.buscar();
+      });
+    });
 
-    }
+  }
 
-    buscar(){
-      this.chatService.searchWordInList(this.path).subscribe( data => {
-        //Take all conversations in path
-        let convsPath:any = data;
-        //Take all the ids/titles of the conversations
-        let claves = Object.keys(convsPath);
-        //Compare if the user id is in it and put it in the conv list
-        claves.forEach(element => {
-          if (element.includes(this.user.sub)) {
-            //AUN FALTA UNA VARIABLE DONDE GUARDAR LA LISTA
-            console.log(element);
-            console.log(convsPath[element]);
-            this.convsList.push( convsPath[element] );
-          }
-        });
-        this.getNames();
-      })
-    }
+  buscar() {
+    this.chatService.searchWordInList(this.path).subscribe(data => {
+      //Take all conversations in path
+      let convsPath: any = data;
+      //Take all the ids/titles of the conversations
+      let claves = Object.keys(convsPath);
+      //Compare if the user id is in it and put it in the conv list
+      claves.forEach(element => {
+        if (element.includes(this.user.sub)) {
+          //AUN FALTA UNA VARIABLE DONDE GUARDAR LA LISTA
+          console.log(element);
+          console.log(convsPath[element]);
+          this.convsList.push(convsPath[element]);
+        }
+      });
 
-    getNames(){
+      this.getNames();
 
-      //IDEA: PONER EN EL IF Y COGER LAS PRIMAS LETRAS DESPUES DE AUTH0 PARA VER SI EL USUARIO ES EL PROFE Y ENTONCES AHI LLAMO A LA FUNCION DE COGER USER POR ID QUE TENGO QUE HACER EN AUTHSERVICE Y LO PONGO EN NAMEPROFE.
-      for (let i = 0; i < this.convsList.length; i++) {
-        let nameProfe:any="";
-        let primerSms:any = Object.values(this.convsList[i])[0];
-        let tresDigit:any = primerSms.participants.recipientId.split('|');
-        console.log(tresDigit);
-        
-        console.log(primerSms.participants.recipientId);
-        console.log(this.profesores)
+      setTimeout(() => {
+        this.loading = false
+      }, 1500);
 
-        if (tresDigit[1].includes('-NtM2')) {
-          //console.log("VAAAEAAARARARARARA")
+    })
+  }
 
-          if (primerSms.participants.recipientId !== this.user.sub) {
-            this.authService.getUserbyId(primerSms.participants.recipientId).subscribe( usario =>{
-              console.log(usario);
-              nameProfe = usario;
-              this.nombreProfesor.push(nameProfe);
-            });
-          }else{
-            this.authService.getUserbyId(primerSms.participants.userId).subscribe( usario =>{
-              console.log(usario);
-              nameProfe = usario;
-              this.nombreProfesor.push(nameProfe);
-            });
-          }
+  getNames() {
 
-          
-          
-          console.log(this.nombreProfesor);
+    //IDEA: PONER EN EL IF Y COGER LAS PRIMAS LETRAS DESPUES DE AUTH0 PARA VER SI EL USUARIO ES EL PROFE Y ENTONCES AHI LLAMO A LA FUNCION DE COGER USER POR ID QUE TENGO QUE HACER EN AUTHSERVICE Y LO PONGO EN NAMEPROFE.
+    for (let i = 0; i < this.convsList.length; i++) {
+      let nameProfe: any = "";
+      let primerSms: any = Object.values(this.convsList[i])[0];
+      let tresDigit: any = primerSms.participants.recipientId.split('|');
+      console.log(tresDigit);
+
+      console.log(primerSms.participants.recipientId);
+      console.log(this.profesores)
+
+      if (tresDigit[1].includes('-N')) {
+        console.log("VAAAEAAARARARARARA")
+
+        if (primerSms.participants.recipientId !== this.user.sub) {
+          this.authService.getUserbyId(primerSms.participants.recipientId).subscribe(usario => {
+            console.log(usario);
+            nameProfe = usario;
+            this.nombreProfesor.push(nameProfe);
+          });
+        } else {
+          this.authService.getUserbyId(primerSms.participants.userId).subscribe(usario => {
+            console.log(usario);
+            nameProfe = usario;
+            this.nombreProfesor.push(nameProfe);
+          });
         }
 
-        else{
-
-          if (primerSms.participants.recipientId !== this.user.sub) {
-            nameProfe = this.profesoresSerice.buscarProfesorId(primerSms.participants.recipientId, this.profesores);
-          }else{
-            nameProfe = this.profesoresSerice.buscarProfesorId(primerSms.participants.userId, this.profesores);
-          }
-          console.log(nameProfe);
-          this.nombreProfesor.push(nameProfe[0]);
-
-        }
 
         console.log(this.nombreProfesor);
+      } else {
 
-        
+        if (primerSms.participants.recipientId !== this.user.sub) {
+          nameProfe = this.profesoresSerice.buscarProfesorId(primerSms.participants.recipientId, this.profesores);
+        } else {
+          nameProfe = this.profesoresSerice.buscarProfesorId(primerSms.participants.userId, this.profesores);
+        }
+        console.log(nameProfe);
+        this.nombreProfesor.push(nameProfe[0]);
+
       }
-    }
 
-    irchat(id:string){
-
-      this.router.navigate(['chat',id]);
+      console.log(this.nombreProfesor);
+      this.displayedProfesor = this.nombreProfesor;
 
     }
+  }
+
+  filter(termino: string) {
+    this.displayedProfesor = this.nombreProfesor.filter(user => user.name.toLowerCase().includes(termino.toLowerCase()));
+  }
+
+  irchat(id: string, fotoProfe: any) {
+    localStorage.setItem('pictureProfe', fotoProfe);
+    this.router.navigate(['chat', id]);
+  }
 
 }

@@ -3,6 +3,7 @@ import { AngularFireDatabase } from "@angular/fire/compat/database";
 import { Router } from '@angular/router';
 import  * as CryptoJS from "crypto-js";
 import { AuthService } from './auth.service';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,13 @@ export class AuthProfeService {
 
   autentificado:boolean = false;
   private readonly localStorageKey = 'currentUser';
+  private apiImageUrl = 'https://api.imgbb.com/1/upload?expiration=15552000&key=5c314ade97137ecb2c1b88c6b02b504b';
 
-  constructor(private db: AngularFireDatabase,private router: Router, private _authService: AuthService) {}
+  constructor(private db: AngularFireDatabase,private router: Router,
+              private _authService: AuthService,
+              private http: HttpClient) {}
 
-  enviarSolicitud(name:string,apell:string,mail:string,password:any,desc:any){
+  enviarSolicitud(name:string,apell:string,mail:string,password:any,desc:any, foto: any){
 
     const solicitudKey = this.generateUniqueKey(); // Generate unique key
     this.db.list(`/solicitudes`).push({
@@ -23,7 +27,7 @@ export class AuthProfeService {
       email: mail,
       password: password,
       descripcion: desc,
-      foto: '',
+      foto: foto,
       timestamp: Date.now()
     }).then(() => {
       console.log('Solicitud enviada successfully with key:', solicitudKey);
@@ -39,6 +43,9 @@ export class AuthProfeService {
   }
 
   aceptarProfesor(profesor:Professor){
+    const formData = new FormData();
+    formData.append('image', profesor.foto);
+
     let nuevoProfe = {
       email: profesor.email,
       user_metadata: {
@@ -49,7 +56,7 @@ export class AuthProfeService {
       app_metadata: {
         role: "profesor"
       },
-      picture: profesor.foto || 'https://example.com/profile.jpg',
+      picture: "",
       user_id: profesor.id,
       given_name: profesor.nombre,
       family_name: profesor.apellido,
@@ -58,10 +65,37 @@ export class AuthProfeService {
       connection: "Username-Password-Authentication",
       password: profesor.password,
       verify_email: true
-    }    
-    this.db.list(`/`).set(`/CuentasProfesores/${profesor.id}`,{nuevoProfe});
-    this.db.list(`/solicitudes`).remove(profesor.id);
-    this._authService.CrearProfesor(nuevoProfe).subscribe(data => console.log(data));
+    }
+
+    if (profesor.foto !== "") {
+
+      this.http.post(this.apiImageUrl, formData).subscribe( (imageData: any) => {
+
+        nuevoProfe.picture = imageData.data;
+
+        this.db.list(`/`).set(`/CuentasProfesores/${profesor.id}`,{nuevoProfe});
+        this.db.list(`/solicitudes`).remove(profesor.id);
+        this._authService.CrearProfesor(nuevoProfe).subscribe(data => console.log(data));
+
+      });
+
+    }else {
+
+      nuevoProfe.picture = 'https://i.ibb.co/vJdBBPb/no-profe-profile.jpg';
+
+      this.db.list(`/`).set(`/CuentasProfesores/${profesor.id}`,{nuevoProfe});
+      this.db.list(`/solicitudes`).remove(profesor.id);
+      this._authService.CrearProfesor(nuevoProfe).subscribe(data => console.log(data));
+    }
+
+
+  }
+
+  uploadImageOnline(imageBase64: any ) {
+    const formData = new FormData();
+    formData.append('image', imageBase64);
+
+    return this.http.post(this.apiImageUrl, formData);
   }
 
   rechazarPeticion(profesor:Professor){

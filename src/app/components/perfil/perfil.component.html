@@ -15,6 +15,22 @@
             <div class="card-body">
               <h5 class="card-title">{{perfil.given_name}}</h5>
               <p class="card-text">{{perfil.email}} <span><button *ngIf="!perfil.email_verified" class="btn btn-outline-primary" (click)="verify()" >Verificar</button></span> </p>
+
+              <ng-container *ngIf="(perfil.nickname == 'TCH') && !changeDesc">
+                <p class="card-text">{{perfil.user_metadata.descripcion}}</p>
+                <p class="card-text"><span><button class="btn btn-outline-primary" (click)="changeDesc = !changeDesc">Editar Descripcion</button></span> </p>
+              </ng-container>
+
+              <ng-container *ngIf="changeDesc">
+                <textarea name="descricion" id="descricion" cols="60" rows="10" [value]="perfil.user_metadata.descripcion" #newDesc></textarea>
+                <p class="card-text"><span><button class="btn btn-outline-primary" (click)="updateProfesorDesc(newDesc.value)">Guardar</button></span> </p>
+              </ng-container>
+
+              <ng-container *ngIf="isGoogle()">
+                <p class="card-text"><span><button class="btn btn-outline-primary" (click)="inpFoto.click()" >Cambiar Photo de perfil</button></span> </p>
+                <input type="file" hidden (change)="previewImage($event)" #inpFoto>
+              </ng-container>
+
             </div>
           </div>
         </div>

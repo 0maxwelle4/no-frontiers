@@ -9,6 +9,7 @@ import { AuthProfeService } from '../../services/auth-profe.service';
 export class RegisterProfesComponent {
 
   loading:boolean = true;
+  imageSrc: any = "";
 
   ngAfterViewInit(): void {
     setTimeout(()=>{this.loading=false},1000)
@@ -19,7 +20,7 @@ export class RegisterProfesComponent {
 
     if (this.validarForm(name,apell,mail,password,desc)) {
 
-      this._authProfe.enviarSolicitud(name.value,apell.value,mail.value,password.value,desc.value);
+      this._authProfe.enviarSolicitud(name.value,apell.value,mail.value,password.value,desc.value,this.imageSrc);
       this._authProfe.listaSolicitudes().subscribe(data => console.log(data));
 
       name.value='';
@@ -36,6 +37,34 @@ export class RegisterProfesComponent {
       name.focus();
     }
 
+  }
+
+  previewImage(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64String = e.target?.result as string;
+        const base64WithoutHeader = base64String.split(',')[1]; // Extract base64 string without header
+        const blob = this.base64ToBlob(base64WithoutHeader);
+
+        // Set imageSrc to display the preview
+        this.imageSrc = base64WithoutHeader;
+
+        console.log(base64WithoutHeader);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  base64ToBlob(base64String: string): Blob {
+    const byteString = atob(base64String);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], {type: 'image/jpeg'}); // Adjust the type according to your image type
   }
 
   validarForm(name:HTMLInputElement,apell:HTMLInputElement,mail:HTMLInputElement,password:HTMLInputElement,desc:HTMLTextAreaElement): boolean{

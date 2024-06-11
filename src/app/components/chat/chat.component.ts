@@ -17,6 +17,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   user:any = [];
   conversations:any = [];
   path: string = 'conversations';
+  profePicture: any = "";
 
   loading:boolean = true;
 
@@ -30,23 +31,23 @@ export class ChatComponent implements OnInit, AfterViewInit {
     private _activatedRoute: ActivatedRoute,
     private router: Router,
     private location: Location
-  ) { 
-    
+  ) {
+
   }
 
 
   ngOnInit(): void {
 
     this._activatedRoute.params.subscribe( (data:any) => {
-      
-      this.id = data.id; 
+
+      this.id = data.id;
       this.authService.getUserProfile().subscribe( data => {
         console.log(data);
         this.user = data;
-        this.chatService.getConversation(this.user.sub,this.id).subscribe( data => console.log(data));
+        this.profePicture = localStorage.getItem('pictureProfe') || 'https://bootdey.com/img/Content/avatar/avatar1.png';
         this.chatService.getConversation(this.user.sub,this.id).subscribe( data => this.conversations = data);
       } );
-    
+
     })
   }
 
@@ -90,6 +91,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     perfil(){
       this.router.navigate(['perfil']);
+    }
+
+    perfilProfe(idProfe: any){
+      if (idProfe.includes('-N'))
+        this.router.navigate([`profesor/${idProfe}`]);
     }
 
   }

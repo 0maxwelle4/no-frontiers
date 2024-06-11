@@ -9,10 +9,10 @@
 						<a class="text-light text-decoration-none me-lg-3" href="/">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="text-light text-decoration-none me-lg-3" [routerLink]="['/about']">About</a>
+						<a class="text-light text-decoration-none me-lg-3" [routerLink]="['/about']">Sobre Nosotros</a>
 					</li>
 					<li class="nav-item">
-						<a class="text-light text-decoration-none me-lg-3" [routerLink]="['/equipo']">Equipo</a>
+						<a class="text-light text-decoration-none me-lg-3" (click)="goToEquipo()" [routerLink]="['/equipo']">Nuestra Plantilla</a>
 					</li>
 					<!-- <li class="nav-item">
 						<a class="text-light text-decoration-none" href="">Contact</a>

@@ -12,11 +12,7 @@ export class ProfesoresService {
 
   URL: string = 'assets/server/profes.php';
 
-  constructor( private http: HttpClient, private _authService: AuthService ) {
-
-
-
-  }
+  constructor( private http: HttpClient, private _authService: AuthService ) {}
 
 
   getProfesores(){
